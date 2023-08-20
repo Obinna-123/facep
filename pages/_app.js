@@ -10,4 +10,4 @@ export default function App({ Component, session, ...pageProps }) {
       </FacepalContext>
     </SessionProvider>
   )
-}
+}                                                                                                                                
