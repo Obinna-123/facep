@@ -1,4 +1,4 @@
-import '@/styles/globals.css' 
+import '@/styles/global.css'
 import { SessionProvider } from 'next-auth/react'
 import { FacepalContext } from '@/settings/global'
 
