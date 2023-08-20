@@ -1,5 +1,5 @@
 import { useContext} from 'react';
-import { AppContext } from '@/settings/globals';
+import { AppContext } from '@/settings/global';
 import Link from "next/link";
 import Head from 'next/head';
 import Image from 'next/image';
