@@ -4,7 +4,6 @@ import { signIn, useSession } from "next-auth/react"
 import { authentication } from "@/settings/firebase.setting"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useRouter } from "next/router"
-import { AuthProvider } from "firebase/auth"
 
 const validationRules = yup.object().shape({
     email:yup.string().required('this field is compulsory'),

@@ -31,6 +31,11 @@ export default function () {
                     src='/facepal_logo.png' 
                     alt="facepal logo" />
                 </div>
+
+                <GoSignOut 
+                className='text-gray-800'
+                onClick={signOut}/>
+
                 <Image 
                 className="rounded-full" 
                 width={48} 
