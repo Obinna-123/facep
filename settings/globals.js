@@ -6,7 +6,7 @@ const FacepalContext = ({children}) => {
     const [ip,setIp] = useState('192.168.1.1');
     const [signedIn,setSignedIn] = useState(false);
 
-    return(
+    return (
         <AppContext.Provider value={{ip,setIp,signedIn,setSignedIn}}>
             {children}
         </AppContext.Provider>
