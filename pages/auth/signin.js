@@ -1,7 +1,8 @@
-import Link from "next/link"
-import { useFormik } from "formik"
-import * as yup from 'yup'
+import Link from "next/link";
+import { useFormik } from "formik";
+import * as yup from 'yup';
 
+//validation rules
 const validationRules = yup.object().shape({
     email:yup.string().required('this field is compulsory'),
     password:yup.string().required()
@@ -11,10 +12,10 @@ export default function Signin() {
     const {handleBlur,handleSubmit,handleChange,errors,touched,values} = useFormik({
         initialValues:{email:'',password:''},
         onSubmit: values => {
-            // get data
-            console.log(values);
+            //get data from
+            console.log(values)
         },
-        validationSchema:validationRules
+        validationSchema:validationRules //here too
     });
 
     return (
@@ -24,25 +25,29 @@ export default function Signin() {
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                     <input 
                     id="email"
-                    type="email"
+                    type="email" 
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder="Email address"
                     className="py-3 sm:py-5 px-2 border border-indigo-400 rounded-lg bg-white/60"
                     />
-                    {errors.email && touched.email ? (<span className=" text-red-500">{errors.email}</span>) : null}
+                    {errors.email && touched.email 
+                    ? <span className="text-red-500">{errors.email}</span> 
+                    : null}
 
                     <input 
                     id="password"
                     type="password" 
-                    value={values.pasword}
+                    value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder="Password"
                     className="py-3 sm:py-5 px-2 border border-indigo-400 rounded-lg bg-white/60"
                     />
-                    {errors.password && touched.password ? <span className=" text-red-500">{errors.password}</span> : null}
+                    {errors.password && touched.password 
+                    ? <span className="text-red-500">{errors.password}</span> 
+                    : null}
 
                     <button type="submit" className="max-w-[160px] h-12 bg-indigo-800 rounded-lg text-white font-bold"
                     >Log in to facepal</button>

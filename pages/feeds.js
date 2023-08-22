@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import {GoSignOut} from 'react-icons/go';
-import { useSession,signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import WritePost from '@/components/WritePost';
 import {getDocs,collection} from 'firebase/firestore';
 import { db } from '@/settings/firebase.setting';
 import PostDisplay from '@/components/PostDisplay';
-import { cdnImages } from '@/assets/demo_cdn_images';
-import { rangeOfRandNums } from '@/assets/range-of-rand-nums';
+
+/*
+REMOVE
+1. live video, et al block
+2. share from post
+3. X form top of post
+*/
 
 export default function Feeds() {
   const {data:session} = useSession();
@@ -25,9 +29,13 @@ export default function Feeds() {
   const getPosts = async () => {
     const res = await getDocs(collection(db,'posts'));
 
-    res.docs.forEach(doc => posts.push({
-      id:doc.id,
-      data:doc.data()
+    setPosts(res.docs.map(doc => {
+      return {
+        id:doc.id,
+        data:{
+          ...doc.data()
+        }
+      }
     }))
   }
   getPosts();
@@ -64,7 +72,7 @@ export default function Feeds() {
                               <PostDisplay 
                               timePosted={post.data.postedAt}
                               body={post.data.body}
-                              postImage={cdnImages[rangeOfRandNums(0,cdnImages.length)]}
+                              postImage={post.data.imageUrl}
                               />
                             </div>
                           ))
