@@ -1,6 +1,6 @@
-const hoursAgo = (pastTimestamp) => {
-    const currentTimestamp = new Date().getTime();
-    const diff = currentTimestamp - pastTimestamp;
+const hoursAgo = (stamp) => {
+    const currentTimeStamp = new Date().getTime();
+    const diff = currentTimeStamp - stamp;
     const hoursPast = Math.floor(diff / 1000 / 60 / 60);
     return hoursPast;
 }
