@@ -12,11 +12,12 @@ import { Button,TextField } from '@mui/material';
 import CustomDialog from './CustomDialog';
 import { db } from '@/settings/firebase.setting';
 import { doc,deleteDoc,updateDoc } from 'firebase/firestore';
+import ActivityIndicator from '@/utils/activity-indicator';
 
-export default function PostDisplay({postId,timePosted,body,postImage}) {
+export default function PostDisplay({postID,timePosted,body,postImage}) {
     const {data:session} = useSession();
-    // POST UPDATE USE STATE//
-    const [updatePost,setUpdatePost] = React.useState(body);
+    const [formInput,setFormInput] = React.useState(body);//for update post form
+    const [showActivityIndicator,setShowActivityIndicator] = React.useState(false);
 
     //MENU CONTROL >>>> START
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,45 +26,50 @@ export default function PostDisplay({postId,timePosted,body,postImage}) {
     const handleClose = () => setAnchorEl(null);
     //MENU CONTROL >>>> END
 
-    //DIALOG CONTROL >>>> START
+    //DELETE DIALOG CONTROL >>>> START
     const [openDialog, setOpenDialog] = React.useState(false);
     const handleClickOpenDialog = () => setOpenDialog(true);
     const handleCloseDialog = () => setOpenDialog(false);
-    
-    //DIALOG CONTROL >>>> END
+    //DELETE DIALOG CONTROL >>>> END
 
-    // UPDATE DIALOG CONTROL >>> START
-    const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
-    const handleClickOpenUpdateDialog = () => setOpenUpdateDialog(true);
-    const handleCloseUpdateDialog = () => setOpenUpdateDialog(false);
-    // UPDATE DIALOG CONTROL >>> START
+    //UPDATE DIALOG CONTROL >>>> START
+    const [openDailogUpdate, setOpenDailogUpdate] = React.useState(false);
+    const handleClickOpenDailogUpdate = () => setOpenDailogUpdate(true);
+    const handleCloseDailogUpdate = () => setOpenDailogUpdate(false);
+    //UPDATE DIALOG CONTROL >>>> END
 
     //FUNCTION FOR DELETE POST
     const handleDeletePost = async () => {
-        await deleteDoc(doc(db,'posts',postId))
-        .then(() => {
-            alert('post deleted');
-            setOpenDialog(false);
-            handleClose();
-        })
+        await deleteDoc(doc(db,'posts',postID))
+        .then(() => alert('post deleted'))
         .catch(e => console.error(e))
     }
 
-    // FUNCTION TO UPDATE POST 
+    //DELETE A POST HANDLER
     const handleUpdatePost = async () => {
-        await updateDoc(doc(db, 'posts', postId),{
-            body: updatePost,
+        handleCloseDailogUpdate();//close dialog
+        setShowActivityIndicator(true);//start ActivityIndicator
+
+        await updateDoc(doc(db,'posts',postID),{
+            body:formInput,
+            updatedAt:new Date().getTime(),
+        },{
+            merge:true,
         })
         .then(() => {
-            alert('Post Updated');
-            setOpenUpdateDialog(false);
-            handleClose();
+            setShowActivityIndicator(false);//stop ActivityIndicator
+            alert('Post updated successfuly');
         })
-        .catch(e => console.error(e))
+        .catch(error =>{ 
+            setShowActivityIndicator(false);//stop ActivityIndicator
+            console.error(error);
+        })
     }
 
     return (
         <>
+        { showActivityIndicator ? <ActivityIndicator/> : null}
+
         <div className="border border-gray-100 bg-white rounded-md shadow-md py-4 mb-4">
             <ul className="flex justify-between px-4">
                 <li className="flex flex-row gap-1 items-center">
@@ -136,10 +142,11 @@ export default function PostDisplay({postId,timePosted,body,postImage}) {
           horizontal: 'left',
         }}
         >
-            <MenuItem onClick={handleClickOpenUpdateDialog} >Update</MenuItem>
+            <MenuItem onClick={handleClickOpenDailogUpdate}>Update</MenuItem>
             <MenuItem onClick={handleClickOpenDialog}>Delete</MenuItem>
         </Menu>
-        {/* DELETE POST CUSTOM DIALOG  */}
+
+        {/* DELETE DIALOG */}
         <CustomDialog 
         openProp={openDialog} 
         handleCloseProp={handleCloseDialog} 
@@ -152,21 +159,25 @@ export default function PostDisplay({postId,timePosted,body,postImage}) {
                 Yes, delete
             </Button>
         </CustomDialog>
-        {/* UPDATE POST CUSTOM DIALOG  */}
+
+        {/* UPDATE DIALOG */}
         <CustomDialog 
-        openProp={openUpdateDialog} 
-        handleCloseProp={handleCloseUpdateDialog} 
-        title='Edit post'>
-            <TextField 
+        openProp={openDailogUpdate} 
+        handleCloseProp={handleCloseDailogUpdate} 
+        title='Update post'>
+            <TextField
             multiline={true}
-            className='w-full my-4'
-            value={updatePost}
-            onChange={(text) => setUpdatePost(text.target.value)}/>
+            className='w-full'
+            value={formInput}
+            onChange={(text) => setFormInput(text.target.value)}/>
+
             <Button 
             variant='outlined' 
             color='primary' 
-            onClick={handleUpdatePost}>
-                Post
+            style={{marginTop:8}}
+            onClick={handleUpdatePost}
+            >
+                Update
             </Button>
         </CustomDialog>
         </>
