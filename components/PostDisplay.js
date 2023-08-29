@@ -8,14 +8,16 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { hoursAgo } from '@/assets/hours-ago';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { Button,TextField } from '@mui/material';
+import { Button,TextField, } from '@mui/material';
 import CustomDialog from './CustomDialog';
 import { db } from '@/settings/firebase.setting';
 import { doc,deleteDoc,updateDoc, } from 'firebase/firestore';
+import ActivityIndicator from '@/utils/activity-indicator';
 
 export default function PostDisplay({ postID,timePosted,body,postImage}) {
     const {data:session} = useSession();
     const [formInput,setFormInput] = React.useState(body);//FOR UPDATE POST FORM
+    const [showActivityIndicator, setshowActivityIndicator]=React.useState(false)
 
     //MENU CONTROL >>>> START
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,6 +47,9 @@ export default function PostDisplay({ postID,timePosted,body,postImage}) {
 
     //FUNCTION FOR UPDATE POST
     const handleUpdatepost = async () => {
+        handleCloseDialogUpdate();//close dialog
+        setshowActivityIndicator(true); //start activity indicator
+
         await updateDoc(doc(db,'posts',postID),{
             body:formInput,
             updatedAt: new Date().getTime(),
@@ -52,12 +57,19 @@ export default function PostDisplay({ postID,timePosted,body,postImage}) {
         {
             merge:true,
         })
-        .then(() => alert('Post Updated Succesfully'))
-        .catch(error => console.error(error))
+        .then(() => {
+            setshowActivityIndicator(false);// stop activity indicator
+            alert('Post Updated Succesfully')
+        })
+        .catch(error => {
+            setshowActivityIndicator(false);// stop activity indicator
+            console.error(error)
+        })
     } 
 
     return (
         <>
+        { showActivityIndicator ? <ActivityIndicator/> : null}
         <div className="border border-gray-100 bg-white rounded-md shadow-md py-4 mb-4">
             <ul className="flex justify-between px-4">
                 <li className="flex flex-row gap-1 items-center">
