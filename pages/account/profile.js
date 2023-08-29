@@ -7,13 +7,9 @@ import PostDisplay from '@/components/PostDisplay';
 import { db } from '@/settings/firebase.setting';
 import { collection,query,where,getDocs,orderBy } from 'firebase/firestore'
 
+
+
 export default function Profile() {
-  const {data:session} = useSession();
-  const router = useRouter();
-  const [userPosts,setUserPosts] = React.useState([]);
-
-
-export default function () {
     const {data:session} = useSession();
     const router = useRouter();
     const [userPosts,setUserPosts] = React.useState([]);
@@ -83,14 +79,13 @@ export default function () {
                 <div className="flex flex-col gap-2 p-3">
                     {
                         userPosts.map(post => (
-                        <div id={post.id}>
-                            <PostDisplay 
-                            postID={post.id}
-                            timePosted={post.data.postedAt}
-                            body={post.data.body}
-                            postImage={post.data.imageUrl}
-                            />
-                        </div>
+                            <div id={post.id}>
+                                <PostDisplay 
+                                postId={post.id}
+                                timePosted={post.data.postedAt}
+                                body={post.data.body}
+                                postImage={post.data.imageUrl}/>
+                            </div>
                         ))
                     }
                 </div>
