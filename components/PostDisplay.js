@@ -15,6 +15,7 @@ import { doc,deleteDoc,updateDoc } from 'firebase/firestore';
 
 export default function PostDisplay({postId,timePosted,body,postImage}) {
     const {data:session} = useSession();
+    // POST UPDATE USE STATE//
     const [updatePost,setUpdatePost] = React.useState(body);
 
     //MENU CONTROL >>>> START
@@ -26,12 +27,16 @@ export default function PostDisplay({postId,timePosted,body,postImage}) {
 
     //DIALOG CONTROL >>>> START
     const [openDialog, setOpenDialog] = React.useState(false);
-    const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
     const handleClickOpenDialog = () => setOpenDialog(true);
     const handleCloseDialog = () => setOpenDialog(false);
+    
+    //DIALOG CONTROL >>>> END
+
+    // UPDATE DIALOG CONTROL >>> START
+    const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
     const handleClickOpenUpdateDialog = () => setOpenUpdateDialog(true);
     const handleCloseUpdateDialog = () => setOpenUpdateDialog(false);
-    //DIALOG CONTROL >>>> END
+    // UPDATE DIALOG CONTROL >>> START
 
     //FUNCTION FOR DELETE POST
     const handleDeletePost = async () => {
