@@ -7,7 +7,7 @@ import PostDisplay from '@/components/PostDisplay';
 import { db } from '@/settings/firebase.setting';
 import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 
-export default function Feeds() {
+export default function Profile() {
   const {data:session} = useSession();
   const router = useRouter();
   const [userPosts,setUserPosts] = React.useState([]);
@@ -78,7 +78,8 @@ export default function Feeds() {
                     {
                         userPosts.map(post => (
                         <div id={post.id}>
-                            <PostDisplay 
+                            <PostDisplay
+                            postID={post.id}
                             timePosted={post.data.postedAt}
                             body={post.data.body}
                             postImage={post.data.imageUrl}
