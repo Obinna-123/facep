@@ -78,7 +78,7 @@ export default function Profile() {
                     {
                         userPosts.map(post => (
                         <div id={post.id}>
-                            <PostDisplay
+                            <PostDisplay 
                             postID={post.id}
                             timePosted={post.data.postedAt}
                             body={post.data.body}
