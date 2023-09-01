@@ -1,6 +1,6 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
-import { cert } from "firebase-admin/app"
+import { cert } from "firebase-admin/app";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 
 export const authOptions = {
