@@ -1,8 +1,9 @@
+import Head from "next/head";
 import { useFormik } from "formik";
 import * as yup from 'yup';
-import { authentication } from "@/settings/firebase.setting";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { authentication } from "@/settings/firebase.setting";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signIn,useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -45,9 +46,14 @@ export default function Signup() {
 
     return (
         <>
-        <main className="h-screen flex justify-center items-center">
+        <Head>
+            <link rel="shortcut icon" href="/facepal_icon_logo.ico" type="image/x-icon" />
+            <title>facepal | Sign to facepal</title>
+            <meta name="description" content="facepal is the coolest social media platform to connect with friends and hold money" />
+        </Head>
+        <main className="h-screen flex justify-center items-center px-4 sm:px-0 bg-gradient-to-b from-white to-gray-400">
             <div className="w-[480px] sm:min-h-[480px] flex flex-col gap-5">
-                <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+                <form className="hidden" onSubmit={handleSubmit}>
                     <input 
                     id="email"
                     type="email" 
@@ -87,12 +93,15 @@ export default function Signup() {
                     >Create Account</button>
                 </form>
         
-                <div className="w-full grid grid-cols-3 gap-3">
-                    <button className="w-full h-12 bg-green-600 rounded-lg text-white font-bold"
+                <div className="w-full flex flex-col gap-3">
+                    <button 
                     onClick={() => signIn('google')}
+                    className="w-full h-12 bg-green-600 rounded-lg text-white font-bold"
                     >Google</button>
-                    <button className="w-full h-12 bg-indigo-600 rounded-lg text-white font-bold"
-                    onClick={() => signIn('github')}>Github</button>
+                    <button
+                    onClick={() => signIn('github')}
+                    className="w-full h-12 bg-indigo-600 rounded-lg text-white font-bold"
+                    >Github</button>
                     <button className="w-full h-12 bg-sky-600 rounded-lg text-white font-bold">Twitter</button>
                 </div>
             </div>
@@ -103,9 +112,9 @@ export default function Signup() {
 
 export async function getServerSideProps(context) {
     const session = await getServerSession(context.req,context.res,authOptions);
-    
+  
     if(session) {
-      return{
+      return {
         redirect:{
           destination:'/feeds',
           permanent:false,
@@ -115,7 +124,7 @@ export async function getServerSideProps(context) {
   
     return {
       props:{
-             session:session
+        session:session
       }
     }
-  }
+}
